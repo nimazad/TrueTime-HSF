@@ -1,0 +1,34 @@
+%--------------------------------------
+%Mutation doesn't work when the value 
+%is zero!!!
+%To solve:
+%if input == 0
+%    input = MutationScale;
+%end 
+%Small inputs still have problems
+%To solve: input + MutationScale;
+%Not converg
+%--------------------------------------
+function Value = Mutation(gene, input)
+Value = 0;
+MutationScale = 0.01 * rand * ((-1)^randint(1,1,[1,2]));
+
+if gene<=3
+    Value = input + MutationScale;
+end
+if gene==4
+    Value = input + MutationScale;
+end
+if gene==5
+    Value = input + MutationScale;
+end
+if gene==6
+    Value = input + randint(1,1,[-2,2]);
+    if Value < 2
+        Value = 2;
+    end
+end
+if Value < 0
+        Value = 0.0;
+end
+end

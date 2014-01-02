@@ -1,0 +1,152 @@
+output(:,6) = output(:,4)./output(:,3);
+output(:,7) = output(:,4)./output(:,5);
+output(:,8) = output(:,5)./output(:,3);
+%%
+clc
+close all
+range = find(output(:,5)>0 & output(:,5)<.15 );%change freq
+All = 2;
+S1 = 1;
+show = All;
+[r c] = size(output);
+%range = r/2:r;
+%range = find(output(:,show)>0);%All QoS
+myData = output(range,:);
+%%
+%'S1-QoS' 'All-QoS' 'Server Period' 'Controller Period' 'Change Frequency'
+%'Control/Server' 'Change/Control' 'change/server'
+%plot(myData(:,6), myData(:,2), '*')
+meanQoS = zeros(1,max(myData(:,6)));
+strdQoS = zeros(1,max(myData(:,6)));
+medianQoS= zeros(1,max(myData(:,6)));
+%%
+for i=1:max(myData(:,6))
+    range = find(myData(:,6)==i);
+    meanQoS(i) = mean(myData(range,show));
+    medianQoS(i) = median(myData(range,show));
+    strdQoS(i) = std(myData(range,show));
+    
+end
+X=1:max(myData(:,6));
+axis([1 20 0 1])
+errorbar(X, meanQoS, strdQoS,'-xr');
+xlabel('Control Period / Server Period');
+ylabel('Total Deadline Miss Ratio');
+hold on
+%errorbar(X, medianQoS, strdQoS,'-xb');
+return
+%%
+myData = output;%(range,:);
+%%
+%'S1-QoS' 'All-QoS' 'Server Period' 'Controller Period' 'Change Frequency'
+%'Control/Server' 'Change/Control' 'change/server'
+%plot(myData(:,6), myData(:,2), '*')
+meanQoS = zeros(1,max(myData(:,6)));
+strdQoS = zeros(1,max(myData(:,6)));
+medianQoS= zeros(1,max(myData(:,6)));
+%% Each sample seperatly
+[r c] = size(output);
+Rmin = 1;
+sampleSize = 10;
+Rmax = Rmin + sampleSize;
+for j=8:12%(r/200)
+    range = Rmin:Rmax;
+    Rmin = Rmin + sampleSize;
+    Rmax = Rmax + sampleSize;
+    myData = output(range,:);
+for i=1:max(myData(:,6))
+    range = find(myData(:,6)==i);
+    meanQoS(i) = mean(myData(range,show));
+    medianQoS(i) = median(myData(range,show));
+    strdQoS(i) = std(myData(range,show));
+    
+end
+X=1:max(myData(:,6))
+meanQoS
+axis([1 10 0 .15])
+errorbar(X, meanQoS, strdQoS,'-xr');
+xlabel('Control Period / Server Period');
+ylabel('Total Deadline Miss Ratio');
+hold on
+end
+%errorbar(X, medianQoS, strdQoS,'-xb');
+%%
+%'S1-QoS' 'All-QoS' 'Server Period' 'Controller Period' 'Change Frequency'
+%'Control/Server' 'Change/Control' 'change/server'
+%plot(myData(:,6), myData(:,2), '*')
+meanQoS = zeros(1,max(myData(:,6)));
+strdQoS = zeros(1,max(myData(:,6)));
+medianQoS= zeros(1,max(myData(:,6)));
+for i=1:2*max(myData(:,6))
+    range = find(myData(:,6)==i/2);
+    meanQoS(i) = mean(myData(range,show));
+    medianQoS(i) = median(myData(range,show));
+    strdQoS(i) = std(myData(range,show));
+    
+end
+X=1:.5:max(myData(:,6))+.5;
+
+errorbar(X, meanQoS, strdQoS,'-xr');
+xlabel('Control Period / Server Period');
+ylabel('Total Deadline Miss Ratio');
+hold on
+%errorbar(X, medianQoS, strdQoS,'-xb');
+return
+%%
+%'S1-QoS' 'All-QoS' 'Server Period' 'Controller Period' 'Change Frequency'
+%'Control/Server' 'Change/Control' 'change/server'
+%plot(myData(:,6), myData(:,2), '*')
+close
+myColor = ['y' 'm' 'c' 'r' 'g' 'b' 'w' 'k' ];
+plotNo = 1;
+for j=50:50:max(myData(:,5))
+    newRange = find(myData(:,5)==j);
+    newData = myData(newRange,:);
+    meanQoS = zeros(1,max(newData(:,6)));
+    strdQoS = zeros(1,max(newData(:,6)));
+    medianQoS= zeros(1,max(newData(:,6)));
+    for i=1:max(newData(:,6))
+        range = find(newData(:,6)==i);
+        meanQoS(i) = mean(newData(range,show));
+        medianQoS(i) = median(newData(range,show));
+        strdQoS(i) = std(newData(range,show));    
+    end
+    X=1:max(newData(:,6));
+    rndclr=[rand, rand, rand];
+    axis([1 20 0 .5])
+    subplot(5,2,plotNo)
+    plotNo = plotNo +1;
+    errorbar(X, meanQoS, strdQoS,'-x','color','b');
+    ylabel('Total Deadline Miss Ratio');
+    xlabel(strcat('Control Period / Server Period Change Period = ', int2str(j)));
+    %hold on
+end
+%errorbar(X, medianQoS, strdQoS,'-xb');
+
+return
+
+%% Change/Server - S1QoS
+meanQoS = zeros(1,10);
+strdQoS = zeros(1,10);
+for i=1:10
+    range = find(myData(:,8)<100*i);
+    meanQoS(i) = mean(myData(range,1));
+    strdQoS(i) = std(myData(range,1));
+    
+end
+X=1:10;
+subplot
+errorbar(X, meanQoS, strdQoS,'-xr');
+
+%% Change/Server - show
+meanQoS = zeros(1,10);
+strdQoS = zeros(1,10);
+for i=1:10
+    range = find(myData(:,7)<100*i);
+    meanQoS(i) = mean(myData(range,show));
+    strdQoS(i) = std(myData(range,show));
+    
+end
+X=1:10;
+subplot
+errorbar(X, meanQoS, strdQoS,'-xr');

@@ -1,0 +1,8 @@
+function [exectime, data] = idle_code(segment, data)
+
+switch segment
+ case 1
+  data.Server   
+  ttGetCPUTime(data.myName) 
+  exectime = -1;
+end

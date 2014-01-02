@@ -1,0 +1,10 @@
+clc 
+numberOfServers = 3;
+NumberOfTaskInServer = 3;
+minPeriod = 1;
+maxPeriod = 10;
+SystemUtilization = .8;
+[periods, exectimes, tasknames, ServerPeriods, ServerBudgates, ServerNames] = TaskGenerator(numberOfServers, NumberOfTaskInServer, minPeriod, maxPeriod, SystemUtilization)
+%% 
+
+

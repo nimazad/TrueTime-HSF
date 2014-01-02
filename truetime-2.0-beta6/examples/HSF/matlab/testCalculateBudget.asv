@@ -1,0 +1,27 @@
+clc
+numberOfServers = 2;
+NumberOfTaskInServer = 3;
+periods = [10 10 10;10 10 10];
+exectimes = [.007 .015 0.365; .009 .007 .597];
+ServerPeriods = [8 9];
+ServerBudgates = [1 1];
+CalculateBudgets()
+ServerBudgates
+B = [3.19349994270206 4.31383359375]
+%%
+U =sum(ServerBudgates./ServerPeriods)
+U =sum(sum(exectimes./periods))
+
+%%
+clc
+numberOfServers = 4;
+NumberOfTaskInServer = 3;
+minPeriod = 5;
+maxPeriod = 20;
+SystemUtilization = .8;
+[periods, exectimes, tasknames, ServerPeriods, ServerBudgates, ServerNames] = TaskGenerator(numberOfServers, NumberOfTaskInServer, minPeriod, maxPeriod, SystemUtilization);
+CalculateBudgets()
+ServerBudgates
+sim('HSF.mdl', 1000)
+run('C:\Users\nmd01\Documents\MATLAB\truetime-2.0-beta6\examples\HSF\matlab\Plot.m')
+        

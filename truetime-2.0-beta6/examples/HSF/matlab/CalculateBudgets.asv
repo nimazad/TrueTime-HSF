@@ -1,0 +1,84 @@
+function ServerBudgates = CalculateBudgets(TaskPeriods, TaskExecTimes, TaskNames, ServerPeriods, ServerBudgets, ServerNames)
+numberOfServers = length(ServerPeriods);
+for server=1:numberOfServers
+    while  ~budgetIsEnough(server, TaskPeriods, length(TaskPeriods(1,:)), TaskExecTimes, ServerPeriods, ServerBudgates)
+        ServerBudgates(server) = ServerBudgates(server) + ServerBudgates(server)*0.005;
+    end
+end
+end
+
+
+function result = budgetIsEnough(server, TaskPeriods, length(TaskPeriods(1,:)), TaskExecTimes, ServerPeriods, ServerBudgates)
+result = 1;
+LCM=lcms(periods(server,:));
+for time=min(min(periods)):LCM
+    demand = 0;
+    for task=1:NumberOfTaskInServer
+        demand = demand + dbf(time, TaskPeriods(server, task), TaskExecTimes(server, task));
+    end
+    resource = sbf(time, ServerPeriods(server), ServerBudgates(server));
+    if demand>resource
+        result = 0;
+        return;
+    end
+end
+end
+
+function result = tbf(time, period, budget)
+if (time-budget*floor(time/budget))>0
+    e = period-budget + time - budget * floor(time/budget)
+else
+    e=0;
+end
+result = (period-budget) + period*floor(time/budget) + e;
+end
+
+function result = dbf(time, period, exectime)
+result = floor(time/period)*exectime;
+end
+
+function result = sbf(time, period, budget)
+e = max((time-(2*(period-budget))-(period*floor((time-(period-budget))/period))),0);
+result = floor((time-(period-budget))/period)*budget + e;
+end
+
+function result = lsbf(time, period, budget)
+result = (budget/period)*(time - 2*(period-budget));
+end
+function output = lcms(numberArray)
+
+numberArray = reshape(numberArray, 1, []);
+
+%% prime factorization array
+for i = 1:size(numberArray,2)
+    temp = factor(numberArray(i));
+    
+    for j = 1:size(temp,2)
+        output(i,j) = temp(1,j);
+    end
+end
+
+%% generate prime number list
+p = primes(max(max(output)));
+%% prepare list of occurences of each prime number
+q = zeros(size(p));
+
+%% generate the list of the maximum occurences of each prime number
+for i = 1:size(p,2)
+    for j = 1:size(output,1)
+        temp = length(find(output(j,:) == p(i)));
+        if(temp > q(1,i))
+            q(1,i) = temp;
+        end
+    end
+end
+
+%% the algorithm
+z = p.^q;
+
+output = 1;
+
+for i = 1:size(z,2)
+    output = output*z(1,i);
+end
+end

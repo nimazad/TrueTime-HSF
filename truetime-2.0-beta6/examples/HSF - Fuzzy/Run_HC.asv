@@ -1,0 +1,67 @@
+clc
+clear
+close all
+%%
+numberOfServers = 3;
+NumberOfTaskInServer = 3;
+SystemUtilization = 1;
+maxSystemUtilization = 1;
+Adaptive = 1;
+Scenario = 3;
+random = 0;
+ControllerType = 1;
+maxExecTime = 0.1;
+simTime = 1000;
+
+K_z = 0;
+K_s = .2;
+K_m = .3;
+K_l = .4;
+h= .03;
+s=0.03;
+m=0.06;
+l=0.1;
+border = 0.1;
+NumberOfGenes = 6-1;
+controllerFrequency = 6;
+Population = [K_s K_m K_l h border controllerFrequency];%6 variables
+NumberOfIndividuals = 20;%should be even
+MaxGeneration = 100;
+initGeneration = 1;
+%%
+h = rand;
+PrevFitness = 0 ;
+
+Parameters = [K_s K_m K_l h border controllerFrequency];
+controllerFrequency = Parameters(6);
+sim('HSF_Fuzzy.mdl', simTime)
+
+S1_dlMiss = max(TotalDeadlineMiss(1,:));
+S1_Finish = max(TotalFinishes(1,:));
+S1_MissRatio = S1_dlMiss / (S1_dlMiss+S1_Finish);
+S2_dlMiss = max(TotalDeadlineMiss(2,:));
+S2_Finish = max(TotalFinishes(2,:));
+S2_MissRatio = S2_dlMiss / (S2_dlMiss+S2_Finish);
+S3_dlMiss = max(TotalDeadlineMiss(3,:));
+S3_Finish = max(TotalFinishes(3,:));
+S3_MissRatio = S3_dlMiss / (S3_dlMiss+S3_Finish);
+missRatio(1,:) =  [S1_MissRatio S2_MissRatio S3_MissRatio];
+finish(1,:) =  [S1_Finish S2_Finish S3_Finish];
+dlMiss(1,:) =  [S1_dlMiss S2_dlMiss S3_dlMiss];
+%disp('    ----Deadline Miss Ratio----');
+%disp(x)
+S1_idle = max(IdleTime(1,:));
+S2_idle = max(IdleTime(2,:));
+S3_idle = max(IdleTime(3,:));
+idle(1,:) = [S1_idle S2_idle S3_idle];
+%% Fitness Function
+for ServerID=1:numberOfServers
+    MeanBudgets(ServerID) = mean(Budgets(ServerID,find(Budgets(ServerID,:)>0)));
+end
+fitness = sum(finish-(dlMiss.*15+(idle./MeanBudgets)));
+
+if fitness >= PrevFitness 
+    h = h + rand;
+else
+    h = 
+end

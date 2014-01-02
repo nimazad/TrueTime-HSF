@@ -1,0 +1,87 @@
+output(:,11) = output(:,4)./output(:,3);
+output(:,12) = output(:,4)./output(:,9);
+%%
+clc
+%close all
+%range = find(output(:,9)>0.);% & output(:,7)<.5 );%
+%range = find(output(range,7)>0. & output(range,7)<.08 );%
+%length(range)/10
+All = 2;
+S1 = 1;
+show = All;
+[r c] = size(output);
+%range = r/2:r;
+%range = find(output(:,show)>0);%All MissRatio
+myData = output;%(range,:);
+%%
+%'S1-MissRatio' 'All-MissRatio' 'Server Period' 'Controller Period' 'Change Frequency'
+%'Control/Server' 
+%plot(myData(:,6), myData(:,2), '*')
+meanMissRatio = zeros(max(myData(:,10)),1);
+strdMissRatio = zeros(max(myData(:,10)),1);
+medianMissRatio= zeros(max(myData(:,10)),1);
+%%
+for i=1:max(myData(:,11))
+    range = find(myData(:,11)==i);
+    meanMissRatio(1,i) = mean(myData(range,show));
+    medianMissRatio(1,i) = median(myData(range,show));
+    strdMissRatio(1,i) = std(myData(range,show));
+    
+end
+X=1:max(myData(:,11));
+%X = num2str(X);
+%barweb(meanMissRatio', strdMissRatio', 10,[],[],[],[],[0 1 0])
+errorbar(X, meanMissRatio(1,:), strdMissRatio(1,:),'-xg');
+xlabel('Control Period / Server Period');
+ylabel('Total Deadline Miss Ratio');
+hold on
+%errorbar(X, medianMissRatio, strdMissRatio,'-xb');
+return
+%% MR against Task Priority
+clc
+myData = output;
+meanMissRatio = zeros(max(myData(:,9)),1);
+strdMissRatio = zeros(max(myData(:,9)),1);
+medianMissRatio= zeros(max(myData(:,9)),1);
+
+for i=1:max(myData(:,9))
+    range = find(myData(:,9)==i);
+    meanMissRatio(1,i) = mean(myData(range,show));
+    medianMissRatio(1,i) = median(myData(range,show));
+    strdMissRatio(1,i) = std(myData(range,show));
+    
+end
+X=1:max(myData(:,9));
+barweb(meanMissRatio', strdMissRatio',2,X);
+%errorbar(X, meanMissRatio, strdMissRatio,'-xr');
+xlabel('Priority');
+ylabel('Total Deadline Miss Ratio');
+
+%errorbar(X, medianMissRatio, strdMissRatio,'-xb');
+
+%% Each sample seperatly
+[r c] = size(output);
+myData = output;
+Rmin = 161;
+sampleSize = 10;
+Rmax = Rmin + sampleSize;
+for j=1:1%(r/200)
+    range = Rmin:Rmax;
+    Rmin = Rmin + sampleSize;
+    Rmax = Rmax + sampleSize;
+    myData = output(range,:);
+for i=1:max(myData(:,10))
+    range = find(myData(:,10)==i);
+    meanMissRatio(i) = mean(myData(range,show));
+    medianMissRatio(i) = median(myData(range,show));
+    strdMissRatio(i) = std(myData(range,show));
+    
+end
+X=1:max(myData(:,10))
+meanMissRatio
+axis([1 10 0 .15])
+errorbar(X, meanMissRatio, strdMissRatio,'-xr');
+xlabel('Control Period / Server Period');
+ylabel('Total Deadline Miss Ratio');
+hold on
+end
