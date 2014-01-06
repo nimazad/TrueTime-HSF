@@ -52,5 +52,5 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   double retval = ttAnalogIn(inpChan); 
 
-  plhs[0] = mxCreateScalarDouble(retval);
+  plhs[0] = mxCreateDoubleScalar(retval);
 }

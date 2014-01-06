@@ -57,5 +57,5 @@ void mexFunction( int nlhs, mxArray *plhs[],
     retval = ttCurrentTime(newTime);
   }
 
-  plhs[0] = mxCreateScalarDouble(retval);
+  plhs[0] = mxCreateDoubleScalar(retval);
 }

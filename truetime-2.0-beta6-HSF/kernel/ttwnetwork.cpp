@@ -1172,7 +1172,7 @@ extern "C" { // use the C fcn-call standard for all functions
     /* Write pointer to MATLAB global workspace */
     /* FIX: The code above is intended to be removed and replaced by this. */
     /* Write rtsys pointer to global workspace */
-    mxArray* var = mxCreateScalarDouble(0.0);
+	mxArray* var = mxCreateDoubleScalar(0.0);
     mexMakeArrayPersistent(var);
     *((long *)mxGetPr(var)) = (long) nwsys;
     char nwsysbuf[MAXCHARS];

@@ -50,7 +50,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   }
 
   if (nlhs >= 2) {
-    plhs[1] = mxCreateScalarDouble(timestamp);
+    plhs[1] = mxCreateDoubleScalar(timestamp);
   }
 
 }

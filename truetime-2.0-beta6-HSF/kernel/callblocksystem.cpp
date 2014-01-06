@@ -64,9 +64,9 @@ void ttCallBlockSystem(int nOutp, double *outp, int nInp, double *inp, const cha
     simsetRHS[0] = mxCreateString("Solver");
     simsetRHS[1] = mxCreateString("FixedStepDiscrete");
     simsetRHS[2] = mxCreateString("FixedStep");
-    simsetRHS[3] = mxCreateScalarDouble(1.0);
+	simsetRHS[3] = mxCreateDoubleScalar(1.0);
     simsetRHS[4] = mxCreateString("MaxDataPoints");
-    simsetRHS[5] = mxCreateScalarDouble(2.0);
+	simsetRHS[5] = mxCreateDoubleScalar(2.0);
     simsetRHS[6] = mxCreateString("OutputVariables");
     simsetRHS[7] = mxCreateString("xy");
     
@@ -86,7 +86,7 @@ void ttCallBlockSystem(int nOutp, double *outp, int nInp, double *inp, const cha
   // [t,x,outp] = sim(blockName,1,options,[0 inp]) 
 
   simRHS[0] = mxCreateString(blockName);
-  simRHS[1] = mxCreateScalarDouble(1.0);
+  simRHS[1] = mxCreateDoubleScalar(1.0);
   simRHS[2] = bd->options;
   simRHS[3] = mxCreateDoubleMatrix(1, nInp+1, mxREAL);
   values = mxGetPr(simRHS[3]);

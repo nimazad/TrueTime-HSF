@@ -574,7 +574,7 @@ static void mdlInitializeSizes(SimStruct *S)
   strncpy((char*)rtsys->blockName, ssGetBlockName(S), MAXCHARS);
 
 #ifdef KERNEL_MATLAB
-  rtsys->segArray = mxCreateScalarDouble(0.0);
+  rtsys->segArray = mxCreateDoubleScalar(0.0);
   mexMakeArrayPersistent(rtsys->segArray);
 #endif
 
@@ -702,7 +702,7 @@ static void mdlInitializeSizes(SimStruct *S)
 
     // pointer variable does not exist - let's create one
     //debugPrintf("Creating global _rtsys variable\n");
-    mxArray* var = mxCreateScalarDouble(0.0);
+	  mxArray* var = mxCreateDoubleScalar(0.0);
     mexMakeArrayPersistent(var);
     mexPutVariable("global", "_rtsys", var);
 

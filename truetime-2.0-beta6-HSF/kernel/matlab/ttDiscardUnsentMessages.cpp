@@ -61,7 +61,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
 
   //  if ( nlhs>=1 ){
-    plhs[0] = mxCreateScalarDouble(nbr);
+  plhs[0] = mxCreateDoubleScalar(nbr);
     //}
 
 

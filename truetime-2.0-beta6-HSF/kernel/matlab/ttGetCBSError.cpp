@@ -53,5 +53,5 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
   double retval = ttGetCBSError(servername); 
     
-  plhs[0] = mxCreateScalarDouble(retval);
+  plhs[0] = mxCreateDoubleScalar(retval);
 }

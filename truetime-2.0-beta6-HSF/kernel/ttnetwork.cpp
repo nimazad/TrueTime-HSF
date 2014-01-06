@@ -1822,7 +1822,7 @@ extern "C" { // use the C fcn-call standard for all functions
      
     /* Write nwsys pointer to global workspace so that the kernel
        blocks can access it */
-    mxArray* var = mxCreateScalarDouble(0.0);
+	mxArray* var = mxCreateDoubleScalar(0.0);
     mexMakeArrayPersistent(var);
     *((long *)mxGetPr(var)) = (long) nwsys;
     char nwsysbuf[MAXCHARS];

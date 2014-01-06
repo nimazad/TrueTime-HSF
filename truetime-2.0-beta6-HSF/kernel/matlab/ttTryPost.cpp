@@ -55,9 +55,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
   mexMakeArrayPersistent(data);
 
   if (ttTryPost(mailboxname, (void *)data)) {
-    plhs[0] = mxCreateScalarDouble(1.0);
+    plhs[0] = mxCreateDoubleScalar(1.0);
   } else {
-    plhs[0] = mxCreateScalarDouble(0.0);
+    plhs[0] = mxCreateDoubleScalar(0.0);
   }
  
 }

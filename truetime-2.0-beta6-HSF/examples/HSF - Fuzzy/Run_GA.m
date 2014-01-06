@@ -2,7 +2,7 @@ clc
 close all
 %return
 clear
-VideoDecoder = importdata('C:\Users\nmd01\Desktop\alloallo1\alloallo1.txt')
+VideoDecoder = importdata('C:\Users\nmd01\Desktop\alloallo1.txt')
 %%
 numberOfServers = 3;
 NumberOfTaskInServer = 3;

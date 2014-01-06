@@ -48,7 +48,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
   if (nrhs == 0) {
     retval = ttGetPeriod(); 
     
-    plhs[0] = mxCreateScalarDouble(retval);
+    plhs[0] = mxCreateDoubleScalar(retval);
 
   } else {
     if (mxIsChar(prhs[0]) != 1 || mxGetM(prhs[0]) != 1) {
@@ -60,7 +60,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mxGetString(prhs[0], taskname, MAXCHARS);
     retval = ttGetPeriod(taskname); 
     
-    plhs[0] = mxCreateScalarDouble(retval);
+    plhs[0] = mxCreateDoubleScalar(retval);
     
   }
 

@@ -65,6 +65,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
 
    plhs[0] = data;
    if ( nlhs>=2 ){
-     plhs[1] = mxCreateScalarDouble(signalPower);
+     plhs[1] = mxCreateDoubleScalar(signalPower);
    }
 }
