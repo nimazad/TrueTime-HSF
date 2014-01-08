@@ -152,7 +152,7 @@ double runKernel(double externalTime) {
   UserTask *usertask;
   InterruptHandler *handler;
   DataNode* dn;
-
+  //debugPrintf("'%s': runkernel at %.16f\n", rtsys->blockName, rtsys->time);
   // If no energy, then we can not run
   if (rtsys->energyLevel <= 0) {
     //debugPrintf("'%s': Energy is out at time: %f\n", rtsys->blockName, rtsys->time);

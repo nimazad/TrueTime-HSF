@@ -29,6 +29,8 @@ IdleError = zeros(1, 1);
 assignin('base','IdleError',IdleError);
 DlError = zeros(1, 1); 
 assignin('base','DlError',DlError);
+SchedulingError = zeros(numberOfServers, 1);
+assignin('base','SchedulingError',SchedulingError);
 
 %% Static variables
 %Adaptive = 1;

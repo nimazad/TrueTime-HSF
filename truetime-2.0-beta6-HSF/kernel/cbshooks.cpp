@@ -36,13 +36,13 @@ void CBS_runkernel(UserTask *task, double duration) {
   task->cbs->cs -= duration;
   if(task->isDLMissed){
 	  task->cbs->error += duration;
-	  debugPrintf("running after deadline task: %s duration: %f error %f \n", task->name, duration, task->cbs->error);
+	  //debugPrintf("running after deadline task: %s duration: %f error %f \n", task->name, duration, task->cbs->error);
 	  }
 }
 
 
 void CBS_arrival(UserTask *task) {
- //debugPrintf("CBS_arrival %s at %5.8f \n", task->name, rtsys->time);
+debugPrintf("CBS_arrival %s at %5.8f \n", task->name, rtsys->time);
 
   rtsys->default_arrival(task);
 
@@ -50,8 +50,10 @@ void CBS_arrival(UserTask *task) {
 
   // Is the server idle?
   if (cbs->nbrJobs == 0) {
+	  //debugPrintf("CBS_arrival: server is idle %s at %5.8f \n", cbs->name, rtsys->time);
     // "Reset" the server if c_s >= (d_s - r)*U_s
     if (cbs->cs*cbs->Ts >= (cbs->ds - rtsys->time)*cbs->Qs) {
+		//debugPrintf("CBS_arrival: condition is correct %s at %5.8f \n", cbs->name, rtsys->time);
       cbs->ds = rtsys->time + cbs->Ts;
 	  cbs->unusedCs += cbs->cs;
 	  //debugPrintf("CBS_arrival:Budget refilled %s at %5.8f \n", cbs->name, rtsys->time);

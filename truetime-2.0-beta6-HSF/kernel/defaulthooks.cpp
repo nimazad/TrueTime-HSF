@@ -82,9 +82,10 @@ void default_release(UserTask *task) {
 
 void default_start(UserTask *task) {
 	//Nima
-	if(task->isDLMissed)
-		debugPrintf("Deadline miss flag reseted %s\n", task->name);
-	task->isDLMissed = false; //Reset DL Miss flag
+	//if(task->isDLMissed)
+		//debugPrintf("Deadline miss flag reseted %s\n", task->name);
+	//task->isDLMissed = false; //Reset DL Miss flag
+	//Manage from task_code.m 
 	
   //debugPrintf("Start-hook for task '%s' at time %5.8f\n",task->name,rtsys->time);
   // Set the execution-time overrun timer (if there is one)

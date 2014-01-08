@@ -39,7 +39,7 @@ double cbsBudgetCodeFcn(int segment, void *data) {
 
     cbs->ds += cbs->Ts;  // postpone deadlne
 	cbs->unusedCs += cbs->cs;
-	debugPrintf("cbsBudgetCodeFcn:Budget refilled %s at %5.8f \n", cbs->name, rtsys->time);
+	//debugPrintf("cbsBudgetCodeFcn:Budget refilled %s at %5.8f \n", cbs->name, rtsys->time);
     cbs->cs = cbs->Qs;   // recharge budget
     cbs->nbrOverruns++;  // increase total number of overruns
     
@@ -69,6 +69,7 @@ double cbsBudgetCodeFcn(int segment, void *data) {
     // Hard CBS
 	//Nima
     // First post the overload restore timer
+	  debugPrintf("'%s': cbs overload at %.16f\n", cbs->name, rtsys->time);
     cbs->state = CBS_OVERLOAD;
     cbs->overloadTimer->time = cbs->ds;
     cbs->overloadEndTime = cbs->ds;
@@ -81,7 +82,7 @@ double cbsBudgetCodeFcn(int segment, void *data) {
       next = (Task*) task->getNext();
       if (task->isUserTask()) {
 	if (((UserTask*)task)->cbs == cbs) {
-		//debugPrintf("%s is shut down until = %5.8f budget = %5.8f at %5.8f \n", task->name, cbs->ds, cbs->cs, rtsys->time);
+		debugPrintf("%s is shut down until = %5.8f budget = %5.8f at %5.8f \n", task->name, cbs->ds, cbs->cs, rtsys->time);
 	  ((UserTask*)task)->release = cbs->ds; // Set wake-up at CBS deadline
 	  task->moveToList(rtsys->timeQ);       // Put it to sleep
 	}
