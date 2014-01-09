@@ -3,11 +3,25 @@ switch segment
     case 1
         writeInWorkspace(data);%For plotting the results
         resetError(data);
+        adaptBudget(data);
+        adaptPeriod(data)
         exectime = data.exectime;
     case 2
         exectime = -1;
 end
 end
+function adaptBudget(data)
+myName = strcat('Server',int2str(data.Server));
+Qs = 15+14*(sin(ttCurrentTime()/50));
+ttSetCBSParameters(myName, Qs, data.ServerPeriods(data.Server));
+end
+
+function adaptPeriod(data)
+myName = strcat('Server',int2str(data.Server));
+P = 30+10*(sin(ttCurrentTime()/100));
+ttSetCBSParameters(myName, ttGetCBSBudget(myName), P);
+end
+
 %% This function returns sum of all deadline misses in the system up to this time point
 function [sum] = allDlMisses(data)
 sum = 0;
@@ -77,6 +91,8 @@ ControlTime = evalin('base', 'ControlTime');
 TotalDeadlineMiss = evalin('base', 'TotalDeadlineMiss');
 Budgets = evalin('base', 'Budgets');
 [row col] = size(DeadlineMisses(data.Server,:));
+Periods = evalin('base', 'Periods');
+[row col] = size(DeadlineMisses(data.Server,:));
 DeadlineMisses(data.Server, col+ 1) = allDlMisses(data);
 [row col] = size(ControlTime(data.Server,:));
 ControlTime(data.Server, col+ 1) = ttCurrentTime();
@@ -85,10 +101,12 @@ TotalDeadlineMiss(data.Server, col+ 1) = allDlMissesHistory(data);
 [row col] = size(Budgets(data.Server,:));
 myName = strcat('Server',int2str(data.Server));
 Budgets(data.Server, col+ 1) = ttGetCBSBudget(myName);
+Periods(data.Server, col+ 1) = ttGetCBSPeriod(myName);
 assignin('base','DeadlineMisses',DeadlineMisses);
 assignin('base','ControlTime',ControlTime);
 assignin('base','TotalDeadlineMiss',TotalDeadlineMiss);
 assignin('base','Budgets',Budgets);
+assignin('base','Periods',Periods);
 baseUnused = evalin('base', 'unused');
 [row col] = size(baseUnused(data.Server,:));
 baseUnused(data.Server, col+1) = ttGetUnusedBudget(myName);
@@ -99,6 +117,10 @@ IdleTime = evalin('base', 'IdleTime');
 IdleTime(data.Server, col+1) = ttGetCPUTime(strcat(myName, '-idle'));
 assignin('base','IdleTime',IdleTime);
 
+currentIdleTime = evalin('base', 'currentIdleTime');
+[row col] = size(currentIdleTime(data.Server,:));
+currentIdleTime(data.Server, col+1) = IdleTime(data.Server, col+1) - IdleTime(data.Server, col);
+assignin('base','currentIdleTime',currentIdleTime);
 
 totalU = evalin('base', 'totalU');
 [row col] = size(totalU);
@@ -112,13 +134,7 @@ assignin('base','TotalFinishes',TotalFinishes);
 
 SchedulingError = evalin('base', 'SchedulingError');
 [row col] = size(SchedulingError);
-%if ttGetCBSError(myName)>0
-   SchedulingError(data.Server,col+1) = ttGetCBSError(myName);%/data.ServerPeriods(data.Server);
-   ttGetCBSError(myName)
-%else
- %  idlePerc = -(calcIdlePerc(myName, data)-idleSetPoint);
-  % SchedulingError(data.Server,col+1) = idlePerc;
-%end
+SchedulingError(data.Server,col+1) = ttGetCBSError(myName);%/data.ServerPeriods(data.Server);
 assignin('base','SchedulingError',SchedulingError);
 end
 

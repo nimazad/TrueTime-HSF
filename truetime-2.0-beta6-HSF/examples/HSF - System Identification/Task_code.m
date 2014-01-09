@@ -5,7 +5,6 @@ switch segment
         data.NoJobs = data.NoJobs + 1;
         ttSetData(data.myName, data);
         exectime = TaskExecution(data);
-        disp(strcat('task start',data.myName,ttCurrentTime()))
     case 2
         %ttAnalogOut(1, data.u)
         data.sumExectime = data.sumExectime + data.exectime;

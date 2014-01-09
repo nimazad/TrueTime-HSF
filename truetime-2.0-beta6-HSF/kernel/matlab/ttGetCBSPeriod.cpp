@@ -20,28 +20,38 @@
  * along with Truetime 2.0 beta. If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef GET_CBS_PERIOD
-#define GET_CBS_PERIOD
+#define KERNEL_MATLAB
+#include "../ttkernel.h" 
 
-#include "getnode.cpp"
 
-double ttGetCBSPeriod(const char *name) {
 
-  DataNode *dn;
+#include "../getcbsperiod.cpp"
+#include "getrtsys.cpp"
 
-  dn = (DataNode*) getNode(name, rtsys->cbsList);
-  if (dn == NULL) {
-    char buf[MAXERRBUF];
-    sprintf(buf, "ttGetCBSPeriod: Non-existent cbs '%s'", name);
-    TT_MEX_ERROR(buf);
-    return 0.0;
+void mexFunction( int nlhs, mxArray *plhs[],
+                  int nrhs, const mxArray *prhs[] )
+{
+  rtsys = getrtsys() ; // Get pointer to rtsys 
+
+  if (rtsys==NULL) {
+    return;
   }
 
-  CBS* cbs = (CBS*) dn->data;
+  // Check number and type of arguments. 
+  if (nrhs != 1) {
+    TT_MEX_ERROR("ttGetCBSPeriod: Wrong number of input arguments!\nUsage: ttGetCBSBudget(ServerName)");
+    return;
+  }
 
-  return cbs->Ts;
+  if (mxIsChar(prhs[0]) != 1 || mxGetM(prhs[0]) != 1) {
+    TT_MEX_ERROR("ttGetCBSPeriod: Server name must be a non-empty string");
+    return;
+  }
 
+  char cbsName[MAXCHARS];
+  mxGetString(prhs[0], cbsName, MAXCHARS);
+
+  double retval = ttGetCBSPeriod(cbsName);
+    
+  plhs[0] = mxCreateDoubleScalar(retval);
 }
-
-#endif
-

@@ -112,6 +112,9 @@ disp('');
 mex ttGetCBSBudget.cpp
 disp('ttGetCBSBudget.cpp');
 disp('');
+mex ttGetCBSPeriod.cpp
+disp('ttGetCBSPeriod.cpp');
+disp('');
 mex ttGetCBSError.cpp
 disp('ttGetCBSError.cpp');
 disp('');

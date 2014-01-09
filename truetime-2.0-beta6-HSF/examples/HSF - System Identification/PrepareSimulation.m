@@ -9,6 +9,8 @@ TotalFinishes = zeros(numberOfServers, 1);
 assignin('base','TotalFinishes',TotalFinishes);
 Budgets = zeros(numberOfServers, 1);
 assignin('base','Budgets',Budgets);
+Periods = zeros(numberOfServers, 1);
+assignin('base','Periods',Periods);
 DeadlineMisses = zeros(numberOfServers, 1);
 assignin('base','DeadlineMisses',DeadlineMisses);
 unused = zeros(numberOfServers, 1);
@@ -23,6 +25,9 @@ DynamicTask4 = zeros(2, 1);
 assignin('base','DynamicTask4',DynamicTask4);
 IdleTime = zeros(numberOfServers, 1);
 assignin('base','IdleTime',IdleTime);
+currentIdleTime = zeros(numberOfServers, 1);
+assignin('base','currentIdleTime',currentIdleTime);
+
 totalU = zeros(1, 1); 
 assignin('base','totalU',totalU);
 IdleError = zeros(1, 1); 

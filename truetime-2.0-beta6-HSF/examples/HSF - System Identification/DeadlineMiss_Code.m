@@ -6,7 +6,6 @@ data.dlMisses = data.dlMisses +1;
 %strcat('task killed: ', taskname)
 ttSetDLFlag(true, taskname); %important
 %fprintf('Deadline miss %s at %d\n', taskname, ttCurrentTime())
-disp('***********************')
 ttSetData(taskname, data);
 exectime = -1;
 end

@@ -19,14 +19,14 @@ exectimes(1,:)  =  [2.5427,    1,    1];%4.3543
 %Server2 tasks
 tasknames{2}    = {'S2T1', 'S2T2', 'S2T3'};
 periods(2,:)    =  [40,        50,      90];
-exectimes(2,:)  =  [2.4060,   1,      1];
+exectimes(2,:)  =  [2.4060,   7,      4];
 %Server3 tasks
 tasknames{3}    = {'S3T1', 'S3T2', ''};
 periods(3,:)    =  [40,        70,      35];
 exectimes(3,:)  =  [2.3213,      1,      1];%4.0628
 %ServerBudgates = CalculateBudgets(periods, exectimes, tasknames, ServerPeriods, ServerBudgates, ServerNames);
-U_tasks = sum(sum(exectimes./periods))
-U_servers = sum(ServerBudgates./ServerPeriods)
+%U_tasks = sum(sum(exectimes./periods))
+%U_servers = sum(ServerBudgates./ServerPeriods)
 
 %% Initialize the kernel
 ttInitKernel('prioHEDF')
