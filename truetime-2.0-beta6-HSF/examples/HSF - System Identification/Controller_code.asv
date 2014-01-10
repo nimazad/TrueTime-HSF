@@ -3,12 +3,23 @@ switch segment
     case 1
         writeInWorkspace(data);%For plotting the results
         resetError(data);
-        %adaptBudget(data);
-        %adaptPeriod(data)
+        adaptBudget(data);
+        adaptPeriod(data)
         exectime = data.exectime;
     case 2
         exectime = -1;
 end
+end
+function adaptBudget(data)
+myName = strcat('Server',int2str(data.Server));
+Qs = 15+5*(sin(ttCurrentTime()/90));
+ttSetCBSParameters(myName, Qs, data.ServerPeriods(data.Server));
+end
+
+function adaptPeriod(data)
+myName = strcat('Server',int2str(data.Server));
+P = 30+10*(sin(ttCurrentTime()/210));
+ttSetCBSParameters(myName, ttGetCBSBudget(myName), P);
 end
 
 %% This function returns sum of all deadline misses in the system up to this time point
@@ -109,8 +120,7 @@ samplingTime = evalin('base', 'samplingTime');
 
 currentIdleTime = evalin('base', 'currentIdleTime');
 [row col] = size(currentIdleTime(data.Server,:));% 
-idle = (IdleTime(data.Server, col+1) - IdleTime(data.Server, col));
-currentIdleTime(data.Server, col+1) = ( samplingTime* .5*.43 -idle)/samplingTime;%ttGetCBSPeriod(myName);
+currentIdleTime(data.Server, col+1) = (samplingTime* .5*.6581- (IdleTime(data.Server, col+1) - IdleTime(data.Server, col)))/ttGetCBSPeriod(myName);
 assignin('base','currentIdleTime',currentIdleTime);
 
 totalU = evalin('base', 'totalU');
@@ -124,8 +134,8 @@ TotalFinishes(data.Server,col+1) = totalFinishedTasks(data);
 assignin('base','TotalFinishes',TotalFinishes);
 
 SchedulingError = evalin('base', 'SchedulingError');
-[row col] = size(SchedulingError);%
-SchedulingError(data.Server,col+1) =  (samplingTime* .5*.43 - ttGetCBSError(myName))/samplingTime;%ttGetCBSPeriod(myName);
+[row col] = size(SchedulingError);
+SchedulingError(data.Server,col+1) =  (samplingTime* .5*.6581 - ttGetCBSError(myName))/ttGetCBSPeriod(myName);
 assignin('base','SchedulingError',SchedulingError);
 end
 

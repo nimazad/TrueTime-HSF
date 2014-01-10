@@ -6,9 +6,8 @@ numberOfServers = 1;
 NumberOfTaskInServer = 3;
 Adaptive = 0;
 simTime = 20000;
-samplingTime = 40
+samplingTime = 80
 adaptTime = 30;
-h=5
 %controllerFrequency = 5;
 sim('HSF.mdl', simTime)
 i=1;
@@ -60,23 +59,21 @@ na = [1 1;1 1]
 nb = [1 1;1 1]
 nc = [1 1]'
 nk = [0 0;0 0]
-%myModel = arx(HSFiddata, [na nb nk])
+myModel = arx(HSFiddata, [na nb nk])
 %myModel = armax(HSFiddata, [na nb nc nk])
 sys = ssest(HSFiddata, 2, 'Ts', samplingTime, 'DisturbanceModel', 'none', 'Form', 'canonical')
-%figure
-%compare(HSFiddata, myModel,sys)
+figure
+compare(HSFiddata, myModel,sys)
 
+h=10;
 a = 1;
 b = 1/h.*ones(1,h);
 output = filter(b,a,output);
 HSFiddata_f = iddata(output, input, samplingTime)
-sys_2 = ssest(HSFiddata_f, 2, 'Ts', samplingTime, 'DisturbanceModel', 'none', 'Form', 'canonical')
-%figure
-%compare(HSFiddata_f, sys)
+sys = ssest(HSFiddata_f, 2, 'Ts', samplingTime, 'DisturbanceModel', 'none', 'Form', 'canonical')
+figure
+compare(HSFiddata_f, sys)
 
 y_hat = sys.a * output' + sys.b * input'
-y_hat_2 = sys_2.a * output' + sys_2.b * input'
-%HSFiddata_model = iddata(y_hat', input, samplingTime)
-sprintf('Original model R^2 = %f', rsquare(output, y_hat'))
-sprintf('Filtered model R^2 = %f', rsquare(output, y_hat_2'))
-%compare(HSFiddata_model, sys)
+HSFiddata_model = iddata(y_hat', input, samplingTime)
+compare(HSFiddata_model, sys)

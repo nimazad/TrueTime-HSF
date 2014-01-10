@@ -21,7 +21,7 @@ function execTime = TaskExecution(data)
 execTime = data.exectime;
 if (strcmp(data.myName,'S1T1'))%  strcmp(data.myName,'S3T1') )
     decodeTimes = evalin('base', 'VideoDecoder.data');
-    execTime = (decodeTimes(data.NoJobs,1))/2;
+    execTime = (decodeTimes(data.NoJobs,1))/5;
     %% Write in the workspace
     DynamicTask = evalin('base', 'DynamicTask');
     [row col] = size(DynamicTask(1,:));
