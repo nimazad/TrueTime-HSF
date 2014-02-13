@@ -70,5 +70,4 @@ else r2 = 1 - sum((y(:)-f(:)).^2)/sum((y(:)).^2);
         r2 = 0;
     end
 end
-
 rmse = sqrt(mean((y(:) - f(:)).^2));

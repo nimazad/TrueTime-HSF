@@ -5,8 +5,8 @@ PrepareSimulation()
 PeriodicServers = 1;
 
 ServerNames     = {'Server1', 'Server2', 'Server3'};
-ServerPeriods   = [10  ,        20  ,        17.5];
-ServerBudgates  = [9,       3,     2];
+ServerPeriods   = [20  ,        20  ,        17.5];
+ServerBudgates  = [5,       3,     2];
 assignin('base','ServerPeriods',ServerPeriods);
 %ServerBudgates(1,3) = .0150;
 %ServerBudgates  =zeros(1,3);
@@ -14,8 +14,8 @@ assignin('base','ServerPeriods',ServerPeriods);
 
 %Server1 tasks
 tasknames{1}    = {'S1T1', 'S1T2', 'S1T3'};
-periods(1,:)    =  [40,        30,      45];
-exectimes(1,:)  =  [2.5427,    7,    4];%4.3543
+periods(1,:)    =  [40,        50,      100];
+exectimes(1,:)  =  [2.5427,    7,    5];%4.3543
 %Server2 tasks
 tasknames{2}    = {'S2T1', 'S2T2', 'S2T3'};
 periods(2,:)    =  [40,        50,      90];
@@ -53,7 +53,7 @@ data.idleTime = zeros(numberOfServers, 1);
 data.ServerPeriods = ServerPeriods;
 data.ServerNames = ServerNames;
 %% Manager Server Creation
-ManagerPeriod = (min(ServerPeriods)*samplingTime)/2;
+ManagerPeriod = 5;
 ManagerBudget = 0.01 * ManagerPeriod;
 ttCreateCBS('Manager', ManagerBudget, ManagerPeriod, HardCBS);
 
@@ -90,21 +90,28 @@ for ServerID=1:numberOfServers
     data.myName     = strcat(ServerNames{ServerID}, '-controller');
     %data.myPeriod   = round((evalin('base','changeFrequency')/samplingTime)/ServerPeriods(ServerID));
     data.myPeriod = samplingTime;
+    data.IdleErrorI = 0;
+    data.LateErrorI = 0;
+    data.LateReference = 0;%-.5*.59*samplingTime;
+    data.IdleReference = 0.05*samplingTime;%-.2*.59*samplingTime;
     ttCreatePeriodicTask(data.myName, starttime, data.myPeriod, 'Controller_code', data);
     assignin('base','controlPeriodRatio',data.myPeriod);
     ttAttachCBS(data.myName, 'Manager');
     
     %% Create budget/period adapter for identification
-    % we can use these tasks to achieve an adaptive framework
-    data.idleLoopCounter = 0;
-    data.PrevIdleTime = 0;
-    data.exectime   = 0;   % control task execution time
-    data.myName     = strcat(ServerNames{ServerID}, '-id');
-    %data.myPeriod   = round((evalin('base','changeFrequency')/samplingTime)/ServerPeriods(ServerID));
-    adaptTime = evalin('base', 'adaptTime');
-    data.myPeriod = adaptTime;
-    ttCreatePeriodicTask(data.myName, starttime, data.myPeriod, 'ID_code', data);
-    ttAttachCBS(data.myName, 'Manager');
+%     % we can use these tasks to achieve an adaptive framework
+    identification = evalin('base', 'identification');
+    if identification
+        data.idleLoopCounter = 0;
+        data.PrevIdleTime = 0;
+        data.exectime   = 0;   % control task execution time
+        data.myName     = strcat(ServerNames{ServerID}, '-id');
+        %data.myPeriod   = round((evalin('base','changeFrequency')/samplingTime)/ServerPeriods(ServerID));
+        adaptTime = evalin('base', 'adaptTime');
+        data.myPeriod = adaptTime;
+        ttCreatePeriodicTask(data.myName, starttime, data.myPeriod, 'ID_code', data);
+        ttAttachCBS(data.myName, 'Manager');
+    end
 end
 %% Global idle task
     ttCreatePeriodicTask('GlobalIdleTask', starttime, idlePeriod, 'Idle_code', data)

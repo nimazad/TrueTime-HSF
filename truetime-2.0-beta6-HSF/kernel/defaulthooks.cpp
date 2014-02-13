@@ -52,11 +52,16 @@ void default_arrival(UserTask *task) {
 
 
 void default_release(UserTask *task) {
-
+	
   // Calculate absolute deadline and assign execution budget 
+	
   task->arrival = rtsys->time;
-  task->absDeadline = task->arrival + task->deadline;
+  //task->absDeadline = task->arrival + task->deadline;
+  //Nima
+  //In order to avoid qeueuing problems - queued releases must have same deadline as they were released in time.
+  task->absDeadline = task->absDeadline + task->deadline;
   task->budget = task->wcExecTime;
+  debugPrintf("Release-hook for task '%s' at time %5.8f deadline set to %f \n", task->name, rtsys->time, task->absDeadline);
 
   // Simulate context switch  
   if (rtsys->contextSwitchTime > TT_TIME_RESOLUTION) {
@@ -65,14 +70,15 @@ void default_release(UserTask *task) {
   }
   // Set the deadline overrun timer (if there is one)
   if (task->DLtimer != NULL) {
+	  task->DLtimer->time = task->absDeadline;
 	  if((int)task->absDeadline <= (int)rtsys->time)
 	  {
+		  task->absDeadline = rtsys->time;
 		  //task->absDeadline = task->absDeadline + task->deadline ;
 		  //debugPrintf("Fixed!");
 		  //debugPrintf("******timeQ insertion problem: for task '%s' for time %5.8f at time %5.8f arrival = %5.8f, deadline = %5.8f release = %5.8f \n",task->name, task->absDeadline, rtsys->time, task->arrival, task->deadline, task->release);
 	  }
 	  
-    task->DLtimer->time = task->absDeadline;
     task->DLtimer->moveToList(rtsys->timeQ);
   }
 
@@ -87,7 +93,7 @@ void default_start(UserTask *task) {
 	//task->isDLMissed = false; //Reset DL Miss flag
 	//Manage from task_code.m 
 	
-  //debugPrintf("Start-hook for task '%s' at time %5.8f\n",task->name,rtsys->time);
+  debugPrintf("Start-hook for task '%s' at time %5.8f\n",task->name,rtsys->time);
   // Set the execution-time overrun timer (if there is one)
   if (task->WCETtimer != NULL && task->budget > TT_TIME_RESOLUTION) {
     task->WCETtimer->time = rtsys->time + task->budget;

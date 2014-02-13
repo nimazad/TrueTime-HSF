@@ -23,13 +23,13 @@ end
 end
 function adaptBudget(data)
 myName = strcat('Server',int2str(data.Server));
-Qs = 15+5*(sin(ttCurrentTime()/90));
-ttSetCBSParameters(myName, Qs, data.ServerPeriods(data.Server));
+Qs = 16+4*(sin(ttCurrentTime()/evalin('base', 'BudgetChange')));
+ttSetCBSParameters(myName, Qs, ttGetCBSPeriod(myName));
 end
 
 function adaptPeriod(data)
 myName = strcat('Server',int2str(data.Server));
-P = 30+5*(sin(ttCurrentTime()/210));
+P = 25+5*(sin(ttCurrentTime()/evalin('base', 'PeriodChange')));
 ttSetCBSParameters(myName, ttGetCBSBudget(myName), P);
 end
 

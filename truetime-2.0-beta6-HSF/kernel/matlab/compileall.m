@@ -115,6 +115,9 @@ disp('');
 mex ttGetCBSPeriod.cpp
 disp('ttGetCBSPeriod.cpp');
 disp('');
+mex ttGetCBSAssigned.cpp
+disp('ttGetCBSAssigned.cpp');
+disp('');
 mex ttGetCBSError.cpp
 disp('ttGetCBSError.cpp');
 disp('');
@@ -151,6 +154,10 @@ disp('');
 mex ttGetWCET.cpp
 disp('ttGetWCET.cpp');
 disp('');
+mex ttGetInvocations.cpp
+disp('ttGetInvocations.cpp');
+disp('');
+
 mex ttGive.cpp
 disp('ttGive.cpp');
 disp('');

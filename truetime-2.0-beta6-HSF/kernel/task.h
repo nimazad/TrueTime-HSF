@@ -62,6 +62,7 @@ class Task : public Node {
   List *blockList; // To store options mexArrays for block system calls 
 
   int nbrInvocations;
+  int totalInvocations;
   List *pending;      // list of pending invocations
 
   int state;         // SLEEPING, READY, RUNNING or WAITING (only user tasks)
@@ -94,6 +95,7 @@ Task::Task(const char *n) {
   mb_data = NULL;
   blockList = new List("BlockList", NULL);
   nbrInvocations = 0;
+  totalInvocations = 0;
   pending = new List("Pending", NULL);
   state = SLEEPING;
   DLMisses = 0;//Added by Nima

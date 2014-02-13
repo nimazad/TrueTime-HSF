@@ -34,6 +34,7 @@ class CBS {
   //Nima
   double unusedCs;
   double error;
+  double assignedCs;
 
   int nbrJobs;
   int state;
@@ -60,6 +61,7 @@ CBS::CBS(const char *cbsname, double qs, double ts, int tp) {
   ds = 0.0;
   //Nima
   unusedCs = -Qs;
+  assignedCs = 0;
   cs = Qs;
   nbrJobs = 0;
   state = CBS_OK;

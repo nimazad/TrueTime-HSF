@@ -22,6 +22,13 @@ void invoke_task(Task *task, const char *invoker) {
       usertask->pending->appendNode(new DataNode(ti, NULL));
     }
     usertask->nbrInvocations++;
+	//Nima
+	if (usertask->nbrInvocations > 1)
+	{
+		debugPrintf("'%s': task_invoke for dl miss('%s','%s') at %f\n", rtsys->blockName, task->name, invoker, rtsys->time);
+		usertask->totalInvocations++;
+	}
+		
 
   } else {
 
@@ -39,7 +46,6 @@ void invoke_task(Task *task, const char *invoker) {
       handler->pending->appendNode(new DataNode(ti, NULL));
     }
     handler->nbrInvocations++;
-
   }
 
 }

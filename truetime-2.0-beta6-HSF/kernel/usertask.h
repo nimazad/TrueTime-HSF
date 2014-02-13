@@ -81,6 +81,7 @@ UserTask::UserTask(const char *n)
 {
   prioRaised = false;
   tempPrio = 0.0;
+  absDeadline = 0.0;
   activationTimer = NULL;
   DLtimer = NULL;
   WCETtimer = NULL;

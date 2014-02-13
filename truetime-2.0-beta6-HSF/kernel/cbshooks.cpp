@@ -34,15 +34,16 @@ void CBS_runkernel(UserTask *task, double duration) {
   rtsys->default_runkernel(task, duration);
   
   task->cbs->cs -= duration;
+  task->cbs->assignedCs += duration;
   if(task->isDLMissed){
 	  task->cbs->error += duration;
-	  //debugPrintf("running after deadline task: %s duration: %f error %f \n", task->name, duration, task->cbs->error);
+	  debugPrintf("running after deadline task: %s duration: %f error %f flag %d\n", task->name, duration, task->cbs->error, task->isDLMissed);
 	  }
 }
 
 
 void CBS_arrival(UserTask *task) {
-debugPrintf("CBS_arrival %s at %5.8f \n", task->name, rtsys->time);
+//debugPrintf("CBS_arrival %s at %5.8f \n", task->name, rtsys->time);
 
   rtsys->default_arrival(task);
 

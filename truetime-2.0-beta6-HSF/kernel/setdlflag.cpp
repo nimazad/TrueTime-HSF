@@ -45,6 +45,6 @@ void ttSetDLFlag(bool flag, const char *nameOfTask) {
   
   // set the flag
   task->isDLMissed = flag;
- 
+  sprintf(buf, "ttSetDLFlag: setting dlMiss flag task '%s' to %d!", nameOfTask, flag);
 }
 #endif

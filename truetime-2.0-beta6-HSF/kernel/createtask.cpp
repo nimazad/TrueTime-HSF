@@ -64,7 +64,7 @@ bool ttCreateTask(const char *name, double starttime, double period, double dead
   task->display = true;
   rtsys->nbrOfSchedTasks++;  // One more schedule graph
 
-  task->absDeadline = deadline;
+  task->absDeadline = 0.0;//deadline; Nima
   task->release = 0.0;
   task->budget = deadline;
   
